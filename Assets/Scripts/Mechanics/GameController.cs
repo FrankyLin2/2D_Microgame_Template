@@ -23,6 +23,7 @@ namespace Platformer.Mechanics
         void OnEnable()
         {
             Instance = this;
+            model.checkpoint = model.spawnPoint;
         }
 
         void OnDisable()
