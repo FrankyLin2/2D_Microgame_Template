@@ -26,6 +26,12 @@ namespace Platformer.Model
         /// The spawn point in the scene.
         /// </summary>
         public Transform spawnPoint;
+        
+        /// <summary>
+        /// temporary checkpoint for player, unserializable
+        /// </summary>
+        [System.NonSerialized]
+        public Transform checkpoint;
 
         /// <summary>
         /// A global jump modifier applied to all initial jump velocities.
