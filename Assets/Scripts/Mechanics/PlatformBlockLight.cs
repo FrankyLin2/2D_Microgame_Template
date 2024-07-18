@@ -44,7 +44,7 @@ namespace Platformer.Mechanics
         /// <returns></returns>
         void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.GetComponent<LightController>() != null && !isLightControllerColliding)
+            if (other.gameObject.CompareTag("LightRing") && !isLightControllerColliding)
             {
                 isLightControllerColliding = true;
                 //Debug.Log("pb: OnTriggerEnter2D colliding with light");
@@ -59,7 +59,7 @@ namespace Platformer.Mechanics
         /// <returns></returns>
         void OnTriggerExit2D(Collider2D other)
         {
-            if (other.GetComponent<LightController>() != null && isLightControllerColliding)
+            if (other.gameObject.CompareTag("LightRing") && isLightControllerColliding)
             {
                 isLightControllerColliding = false;
                 //Debug.Log("pb: OnTriggerExit2D light exits");

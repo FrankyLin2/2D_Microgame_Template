@@ -11,7 +11,6 @@ namespace Platformer.Mechanics
         private ObstaclePath obstaclePath;
         public class Mover
         {
-            float p = 0;
             float duration;
             float startTime;
             bool bForward = true;

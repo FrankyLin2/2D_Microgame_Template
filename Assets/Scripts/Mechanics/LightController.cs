@@ -15,10 +15,13 @@ namespace Platformer.Mechanics
         public float maxSpeed = 5f;  // Maximum speed the object can move
         private Vector3 targetPosition;
         private TrailRenderer mytrailRenderer;
-
+        private Rigidbody2D rb;
+        public float speedMultiplier = 2.0f;
+        
         void Start()
         {
             mytrailRenderer = GetComponent<TrailRenderer>();
+            rb = GetComponent<Rigidbody2D>();
         }
         void Update()
         {
@@ -32,16 +35,8 @@ namespace Platformer.Mechanics
 
             Vector3 dir = mousePosition - this.transform.position;
             float distance = dir.magnitude;
-
-            if (distance > maxSpeed * Time.deltaTime)
-            {
-                dir.Normalize();
-                this.transform.position += dir * maxSpeed * Time.deltaTime;
-            }
-            else
-            {
-                transform.position = mousePosition;
-            }
+            rb.velocity = speedMultiplier * Mathf.Min(distance, maxSpeed) * dir.normalized;
+            
 
         }
         
