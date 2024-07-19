@@ -17,7 +17,7 @@ namespace Platformer.Mechanics
         void OnTriggerEnter2D(Collider2D collider)
         {
             var p = collider.gameObject.GetComponent<PlayerController>();
-            if (p != null)
+            if (p != null && videoClip != null)
             {
                 //play video
                 if (Camera.main != null)
@@ -37,6 +37,12 @@ namespace Platformer.Mechanics
                 // var ev = Schedule<PlayerEnteredVictoryZone>();
                 // ev.victoryZone = this;
                 
+            }
+            else if (p != null)
+            {
+                // SceneManager.LoadScene(nextScene);
+                var gameController = GameObject.Find("GameController").GetComponent<MetaGameController>();
+                gameController.ToggleMainMenu(true);
             }
         }
         public void OnVideoFinished(VideoPlayer thisPlay)
