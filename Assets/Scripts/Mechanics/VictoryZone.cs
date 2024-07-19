@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using Platformer.Gameplay;
 using Platformer.UI;
 using UnityEngine;
@@ -32,41 +33,25 @@ namespace Platformer.Mechanics
                 if (Camera.main != null && vp == null && !playedOnce)
                 {
                     Camera.main.gameObject.AddComponent<VideoPlayer>();
-                    var videoPlayer = Camera.main.GetComponent<VideoPlayer>();
-                    videoPlayer.renderMode = VideoRenderMode.CameraNearPlane;
-                    videoPlayer.clip = videoClip;
-                    videoPlayer.loopPointReached += OnVideoFinished;
-                    vp = videoPlayer;
-                    videoPlayer.Play();
+                    vp = Camera.main.GetComponent<VideoPlayer>();
+                    vp.renderMode = VideoRenderMode.CameraNearPlane;
+                    vp.clip = videoClip;
+                    vp.loopPointReached += OnVideoFinished;
+                    
+                    vp.Play();
+                }
+            }
+            
+            if (Input.GetMouseButtonDown(1))
+            {
+                // stop play video
+                if (Camera.main != null && vp != null)
+                {
+                    vp.Stop();
+                    Destroy(gameObject);
                 }
             }
         }
-        
-        /*void OnTriggerEnter2D(Collider2D collider)
-        {
-            var p = collider.gameObject.GetComponent<LightController>();
-            if (p != null)
-            {
-                //play video
-                if (Camera.main != null)
-                {
-                    Camera.main.gameObject.AddComponent<VideoPlayer>();
-                    var videoPlayer = Camera.main.GetComponent<VideoPlayer>();
-                    videoPlayer.renderMode = VideoRenderMode.CameraNearPlane;
-                    videoPlayer.clip = videoClip;
-                    videoPlayer.loopPointReached += OnVideoFinished;
-                    videoPlayer.Play();
-                    
-                }
-
-                // after video is finished, load next scene, packaged as a event
-                
-                
-                // var ev = Schedule<PlayerEnteredVictoryZone>();
-                // ev.victoryZone = this;
-                
-            }
-        }*/
         
         public void OnVideoFinished(VideoPlayer thisPlay)
         {
