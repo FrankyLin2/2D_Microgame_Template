@@ -23,12 +23,12 @@ namespace Platformer.Mechanics
             mytrailRenderer = GetComponent<TrailRenderer>();
             rb = GetComponent<Rigidbody2D>();
         }
-        void Update()
+        void FixedUpdate()
         {
             FollowMouse();
         }
 
-        void FollowMouse()
+        /*void FollowMouse()
         {
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             mousePosition.z = 0f;
@@ -38,36 +38,31 @@ namespace Platformer.Mechanics
             rb.velocity = speedMultiplier * Mathf.Min(distance, maxSpeed) * dir.normalized;
             
 
-        }
-        
-        /*void OnCollisionEnter2D(Collision2D collision)
-        {
-            
-            Debug.Log("LightController: OnCollisionEnter2D ");
-            var other = collision.gameObject.GetComponent<PlatformBlock>();
-            if (other != null)
-            {
-                Debug.Log("LightController:OnCollisionEnter2D colliding with pb");
-                var ev = Schedule<LightSourceCollision>();
-                ev.playerLight = this;
-                ev.pb = other;
-                ev.colType = LightSourceCollision.CollisionType.Enter;
-            }
-        }
-        
-        void OnCollisionExit2D(Collision2D collision)
-        {
-            
-            Debug.Log("LightController: OnCollisionExit2D");
-            var other = collision.gameObject.GetComponent<PlatformBlock>();
-            if (other != null)
-            {
-                Debug.Log("LightController:OnCollisionExit2D colliding with pb ends");
-                var ev = Schedule<LightSourceCollision>();
-                ev.playerLight = this;
-                ev.pb = other;
-                ev.colType = LightSourceCollision.CollisionType.Exit;
-            }
         }*/
+        void FollowMouse()
+        {
+            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mousePosition.z = 0f; // Ensure the z position is zero for 2D
+
+            Vector2 dir = (mousePosition - transform.position).normalized;
+            float distance = Vector2.Distance(mousePosition, transform.position);
+            rb.velocity = speedMultiplier * Mathf.Min(distance, maxSpeed) * dir;
+
+            // Calculate the screen boundaries in world space for 2D
+            Vector3 screenBottomLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0));
+            Vector3 screenTopRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
+
+            // Convert screen boundaries to Vector2
+            Vector2 screenBottomLeft2D = new Vector2(screenBottomLeft.x, screenBottomLeft.y);
+            Vector2 screenTopRight2D = new Vector2(screenTopRight.x, screenTopRight.y);
+
+            // Clamp the object's position to stay within the screen boundaries
+            Vector2 newPosition = rb.position + rb.velocity * Time.fixedDeltaTime; // Use rb.position for 2D Rigidbody
+            newPosition.x = Mathf.Clamp(newPosition.x, screenBottomLeft2D.x, screenTopRight2D.x);
+            newPosition.y = Mathf.Clamp(newPosition.y, screenBottomLeft2D.y, screenTopRight2D.y);
+
+            rb.MovePosition(newPosition); // Move the Rigidbody2D
+        }
+      
     }
 }
