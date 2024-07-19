@@ -19,17 +19,31 @@ namespace Platformer.Mechanics
         public float speedMultiplier = 2.0f;
 
         public GameObject player;
-        
+        private Vector3 playerPos;
+        public float maxDist = 100.0f;
+        [SerializeField] private float currentDistWithPlayer = 0f;
         void Start()
         {
             mytrailRenderer = GetComponent<TrailRenderer>();
             rb = GetComponent<Rigidbody2D>();
             rb.isKinematic = false;
+            if (playerPos == null)
+                Debug.LogError("LightController: 没有绑定玩家！！");
+            else 
+                playerPos = player.transform.position;
         }
         void FixedUpdate()
         {
             FollowMouse();
-            
+
+            Vector3 pos = this.transform.position;
+            playerPos = player.transform.position;
+            currentDistWithPlayer = Vector2.Distance(new Vector2(pos.x, pos.y), new Vector2(playerPos.x, playerPos.y));
+            if (currentDistWithPlayer >= maxDist)
+            {
+                TeleportLight(playerPos);
+            }
+                
         }
 
         /*void FollowMouse()
