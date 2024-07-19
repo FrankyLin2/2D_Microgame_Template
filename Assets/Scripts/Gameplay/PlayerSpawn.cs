@@ -29,8 +29,8 @@ namespace Platformer.Gameplay
             }
             player.jumpState = PlayerController.JumpState.Grounded;
             player.animator.SetBool("dead", false);
-            model.virtualCamera.m_Follow = player.transform;
-            model.virtualCamera.m_LookAt = player.transform;
+            model.virtualCamera.m_Follow = player.transform.GetChild(0);
+            model.virtualCamera.m_LookAt = player.transform.GetChild(0);
             Simulation.Schedule<EnablePlayerInput>(2f);
         }
     }
