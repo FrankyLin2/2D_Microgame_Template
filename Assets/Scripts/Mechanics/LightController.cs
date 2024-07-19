@@ -128,7 +128,7 @@ namespace Platformer.Mechanics
                 if ((player.transform.position - transform.position).magnitude > maxdistance || rb.velocity.magnitude < 0.1f)
                 {
                     bSplatted = false;
-                    TeleportLight(player.transform.position);
+                    RigidTeleportLight(player.transform.position);
 
                 }
 
@@ -138,6 +138,14 @@ namespace Platformer.Mechanics
         }
         
         public void TeleportLight(Vector3 position)
+        {
+            var rb = this.gameObject.GetComponent<Rigidbody2D>();
+            rb.isKinematic = true;
+            this.gameObject.transform.position = position;
+            rb.isKinematic = false;
+        }
+        
+        public void RigidTeleportLight(Vector3 position)
         {
             var rb = this.gameObject.GetComponent<Rigidbody2D>();
             rb.isKinematic = true;
