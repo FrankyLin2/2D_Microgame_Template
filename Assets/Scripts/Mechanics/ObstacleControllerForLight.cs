@@ -9,6 +9,7 @@ namespace Platformer.Mechanics
         public float chargeTime = 2.0f;
         private float startTime;
         public Sprite ActiveSprite;
+        private Animator animator;
 
         public void OnTriggerEnter2D(Collider2D other)
         {
@@ -28,6 +29,7 @@ namespace Platformer.Mechanics
                 {
                     obstacleMover = new ObstacleController.Mover(obstaclePath, true);
                     this.gameObject.GetComponent<SpriteRenderer>().sprite = ActiveSprite;
+                    animator.SetBool("bLightOn", true);
                 }
             }
         }
@@ -37,6 +39,7 @@ namespace Platformer.Mechanics
         public void Start()
         {
             obstaclePath = this.gameObject.transform.parent.gameObject.GetComponentInChildren<ObstaclePath>();
+            animator = this.gameObject.GetComponent<Animator>();
         }
         
         public void Update()
