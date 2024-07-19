@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,7 +18,13 @@ namespace Platformer.Mechanics
         private TrailRenderer mytrailRenderer;
         private Rigidbody2D rb;
         public float speedMultiplier = 2.0f;
+        public float maxdistance = 8.0f;
         
+        // for splatting
+        private bool bReadyCached = false;
+        private bool bReadySplatted = false;
+        private bool bSplatted = false;
+        private PlayerController player;
         void Start()
         {
             mytrailRenderer = GetComponent<TrailRenderer>();
@@ -25,7 +32,8 @@ namespace Platformer.Mechanics
         }
         void FixedUpdate()
         {
-            FollowMouse();
+            if(!bSplatted && !bReadySplatted)
+                FollowMouse();
         }
 
         /*void FollowMouse()
@@ -63,6 +71,78 @@ namespace Platformer.Mechanics
 
             rb.MovePosition(newPosition); // Move the Rigidbody2D
         }
-      
+
+        public void OnTriggerEnter2D(Collider2D other)
+        {
+            var player = other.gameObject.GetComponent<PlayerController>();
+            if (player != null)
+            {
+                bReadyCached = true;
+            }
+        }
+        public void OnTriggerExit2D(Collider2D other)
+        {
+            var player = other.gameObject.GetComponent<PlayerController>();
+            if (player != null)
+            {
+                bReadyCached = false;
+            }
+        }
+
+
+        public void Update()
+        {
+            if (bReadyCached)
+            {
+                if(Input.GetButtonDown("Fire1"))
+                {
+                    bReadySplatted = true;
+                    bReadyCached = false;
+                    rb.isKinematic = false;
+                }
+            }
+
+            if (bReadySplatted)
+            {
+                var model = Simulation.GetModel<PlatformerModel>();
+                player = model.player;
+                if (Input.GetButtonUp("Fire1"))
+                {
+                    bSplatted = true;
+                    bReadySplatted = false;
+                    Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    mousePosition.z = 0f; // Ensure the z position is zero for 2D
+
+                    Vector2 dir = (mousePosition - transform.position).normalized;
+                    rb.velocity = maxSpeed * dir.normalized;
+                }
+                else
+                {
+                    this.transform.position = player.transform.GetChild(0).position;
+                }
+                
+            }
+
+            if (bSplatted)
+            {
+                if ((player.transform.position - transform.position).magnitude > maxdistance || rb.velocity.magnitude < 0.1f)
+                {
+                    bSplatted = false;
+                    TeleportLight(player.transform.position);
+
+                }
+
+            }
+
+
+        }
+        
+        public void TeleportLight(Vector3 position)
+        {
+            var rb = this.gameObject.GetComponent<Rigidbody2D>();
+            rb.isKinematic = true;
+            rb.MovePosition(position);
+            rb.isKinematic = false;
+        }
     }
 }
