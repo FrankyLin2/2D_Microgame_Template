@@ -17,15 +17,19 @@ namespace Platformer.Mechanics
         private TrailRenderer mytrailRenderer;
         private Rigidbody2D rb;
         public float speedMultiplier = 2.0f;
+
+        public GameObject player;
         
         void Start()
         {
             mytrailRenderer = GetComponent<TrailRenderer>();
             rb = GetComponent<Rigidbody2D>();
+            rb.isKinematic = false;
         }
         void FixedUpdate()
         {
             FollowMouse();
+            
         }
 
         /*void FollowMouse()
@@ -63,6 +67,14 @@ namespace Platformer.Mechanics
 
             rb.MovePosition(newPosition); // Move the Rigidbody2D
         }
-      
+
+        public void TeleportLight(Vector3 position)
+        {
+            var rb = GetComponent<Rigidbody2D>();
+            rb.isKinematic = true;
+            this.gameObject.transform.position = position;
+            rb.isKinematic = false;
+        }
+
     }
 }

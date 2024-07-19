@@ -20,6 +20,13 @@ namespace Platformer.Gameplay
                 player.audioSource.PlayOneShot(player.respawnAudio);
             player.health.Increment();
             player.Teleport(model.checkpoint.transform.position);
+
+            var lightGO = model.lightObject;
+            var lc = lightGO.GetComponent<LightController>();
+            if (lc != null)
+            {
+                lc.TeleportLight(model.checkpoint.transform.position);
+            }
             player.jumpState = PlayerController.JumpState.Grounded;
             player.animator.SetBool("dead", false);
             model.virtualCamera.m_Follow = player.transform.GetChild(0);
