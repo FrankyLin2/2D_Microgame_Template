@@ -44,5 +44,7 @@ namespace Platformer.Model
         /// </summary>
         public float jumpDeceleration = 0.5f;
 
+        public GameObject lightObject;
+
     }
 }
