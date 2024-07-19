@@ -12,6 +12,7 @@ namespace Platformer.Mechanics
         private BoxCollider2D nonTriggerCollider;
         private BoxCollider2D triggerCollider;
         private bool isLightControllerColliding = false;
+        public Sprite activeSprite;
 
         void Start()
         {
@@ -49,6 +50,12 @@ namespace Platformer.Mechanics
                 isLightControllerColliding = true;
                 //Debug.Log("pb: OnTriggerEnter2D colliding with light");
                 SwitchStatus(false);
+                var tempSprite = GetComponent<SpriteRenderer>().sprite;
+                if (activeSprite != null)
+                {
+                    GetComponent<SpriteRenderer>().sprite = activeSprite;
+                    activeSprite = tempSprite;
+                }
             }
         }
 
@@ -64,6 +71,12 @@ namespace Platformer.Mechanics
                 isLightControllerColliding = false;
                 //Debug.Log("pb: OnTriggerExit2D light exits");
                 SwitchStatus(true);
+                var tempSprite = GetComponent<SpriteRenderer>().sprite;
+                if (activeSprite != null)
+                {
+                    GetComponent<SpriteRenderer>().sprite = activeSprite;
+                    activeSprite = tempSprite;
+                }
             }
         }
         
