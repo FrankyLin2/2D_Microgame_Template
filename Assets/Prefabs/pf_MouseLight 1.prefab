@@ -223,6 +223,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSpeed: 15
   speedMultiplier: 5
+  player: {fileID: 0}
 --- !u!96 &5742560076882235546
 TrailRenderer:
   serializedVersion: 3
@@ -264,7 +265,7 @@ TrailRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 4
   m_Time: 0.7
   m_PreviewTimeScale: 1
   m_Parameters:
